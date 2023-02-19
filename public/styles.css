@@ -1,0 +1,191 @@
+body {
+    background: #6D9886;
+    margin: 0;
+}
+
+/* FONTS */
+
+h1,
+h3,
+h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+h3 {
+    margin: 3px 10px;
+}
+
+h4 {
+    margin: 0px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+/* xxx FONTS xxx */
+
+
+
+/* Form */
+form {
+    /* width: 75%; */
+    background: whitesmoke;
+    margin: 0px 30px;
+    padding: 5px;
+    overflow: hidden;
+    overflow: break-word;
+}
+
+
+.menuSection {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#signalMenu {
+    overflow-y: scroll;
+    height: 100px;
+    width: 187.5px;
+}
+
+/* xxx Form xxx */
+
+
+
+
+/* Layout */
+
+/* navbar */
+#navbar {
+    background: white;
+    height: 60px;
+    display: grid;
+    grid-template: 60px / 60px 1fr;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    gap: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    background-clip: border-box;
+
+}
+
+#navbar .navLinks {
+    background: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0px 10px;
+}
+
+/*xxx navbar xxx*/
+
+#sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 60px;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    transition: width 0.7s;
+}
+
+#openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: none;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+#mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    transition: margin-left 0.6s;
+    min-height: calc(100vh - 60px);
+    /* margin: 30px; */
+
+}
+
+#plots {
+    background-color: #6D9886;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    flex: 1;
+    width: 100%;
+}
+
+/* .plot-container {
+    resize: both;
+    overflow: auto;
+} */
+
+.responsiveDiv {
+    resize: both;
+    overflow: auto;
+}
+
+
+
+.plotDiv {
+    margin: 30px;
+}
+
+#mediaMenu {
+    width: 55%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: space-around;
+    align-items: center;
+    margin: 2px auto;
+}
+
+
+
+/* xxx Layout xxx */
+
+/* Footer */
+
+#footer {
+    background-color: white;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0px 10px;
+    transition: margin-left 0.7s;
+
+}
+
+/* xxx Footer xxx */

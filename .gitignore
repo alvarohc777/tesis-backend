@@ -1,0 +1,7 @@
+/env/
+/prod_env/
+ninjaserver/env-django-ninja/
+/package_tutorial/
+__pycache__/
+*.pyc
+*.csv
