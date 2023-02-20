@@ -1,24 +1,14 @@
 from ninja import NinjaAPI, File, Schema
 from ninja.files import UploadedFile
-
-
-
+from fault_detector.models import EventSignal
+from fault_detector.schema import SignalNameSchema, EventSignalSchema, NotFoundSchema
+from typing import List
 from utils_tesis.signalload import CSV_pandas_path
 import utils_tesis.plot_api as plt_api
 # from pydantic import BaseModel
 
 api =NinjaAPI()
 
-# class SignalName(BaseModel):
-#     # csv_name: str
-#     signal_name: str
-class SignalName(Schema):
-    # csv_name: str
-    signal_name: str
-
-@api.get('/hello')
-def hello(request):
-    return "Hello World"
 
 # Variables
 request_information = {}
@@ -43,7 +33,7 @@ def post_CSV(request, csv_files: UploadedFile = File(...)):
 
     
 @api.post("/signalName", tags=["CSV"])
-def post_signal_name(request, load: SignalName):
+def post_signal_name(request, load: SignalNameSchema):
     signal_name = load.signal_name
     
     # Update signal information
@@ -119,5 +109,19 @@ async def plot_si_fft_anim(request):
     xf, si_fft_windows, max_min, plot_type = plt_api.anim_si_fft(request_information)
     
     return [xf, si_fft_windows, max_min, plot_type]
+
+
+
+@api.get("/csvSamples", response=List[EventSignalSchema])
+def csvSamples(request):
+    return EventSignal.objects.all()
+
+@api.get('/csvSamples/{csv_id}', response={200: EventSignalSchema, 404: NotFoundSchema})
+def csvSample(request, csv_id:int):
+    try:
+        csv_file = EventSignal.objects.get(pk=csv_id)
+        return 200, csv_file
+    except EventSignal.DoesNotExist as e:
+        return 404, {"message": "CSV not found"}
 
 # app.mount("/", StaticFiles(directory="public", html=True), name="static")
