@@ -72,7 +72,7 @@ def plot_trip_signal(request):
     print(plot_type)
     return [t_window, trip, line_shape, plot_type]
 
-@api.post("/plots/imgSITrip", tags=["static_plots"])
+@api.get("/plots/imgSITrip", tags=["static_plots"])
 def plot_trip_si_signal(request):
 
     t_window, trip, line_shape, plot_type = plt_api.img_si_trip(request_information)
