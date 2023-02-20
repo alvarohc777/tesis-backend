@@ -128,6 +128,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
+## UNCOMMENT FOR PYTHON ANYWHERE
+# STATIC_ROOT = '/home/aherrada/tesis_backend/ninjaserver/static/'
+
 # # For static Files ---------------------------------------------
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'static'),
