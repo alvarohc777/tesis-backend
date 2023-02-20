@@ -5,22 +5,36 @@ from fault_detector.schema import SignalNameSchema, EventSignalSchema, NotFoundS
 from typing import List
 from utils_tesis.signalload import CSV_pandas_path
 import utils_tesis.plot_api as plt_api
+
+import shutil
+import os
+import glob
 # from pydantic import BaseModel
 
 api =NinjaAPI()
-
+print(os.getcwd())
+temp_csv_path = f"{os.getcwd()}/fault_detector/temp_csv"
+if not os.path.isdir(temp_csv_path):
+    print('Creating temp csv folder')
+    os.makedirs(temp_csv_path)
+else:
+    print('Deleting Existing files')
+    file_list = glob.glob(f"{temp_csv_path}/*.csv")
+    for file in file_list:
+        os.remove(file)
 
 # Variables
 request_information = {}
 
 @api.post('/uploadCSV', tags=['CSV'])
 def post_CSV(request, csv_files: UploadedFile = File(...)):
-    with open(csv_files.name, "wb+") as f:
+    csv_file_path = f"{temp_csv_path}/{csv_files.name}"
+    with open(csv_file_path, "wb+") as f:
         f.write(csv_files.file.read())
     request_information.clear()
     request_information["plots"] = {}
     csv_file_name = csv_files.name
-    signals = CSV_pandas_path(csv_file_name)
+    signals = CSV_pandas_path(csv_file_path)
 
     request_information["filename"] = csv_file_name
     request_information["signals"] = signals
@@ -114,12 +128,16 @@ async def plot_si_fft_anim(request):
 
 @api.get("/csvSamples", response=List[EventSignalSchema])
 def csvSamples(request):
+    
     return EventSignal.objects.all()
 
 @api.get('/csvSamples/{csv_id}', response={200: EventSignalSchema, 404: NotFoundSchema})
 def csvSample(request, csv_id:int):
     try:
         csv_file = EventSignal.objects.get(pk=csv_id)
+        print(csv_file.CSV)
+        shutil.copy(str(csv_file.CSV), temp_csv_path)
+
         return 200, csv_file
     except EventSignal.DoesNotExist as e:
         return 404, {"message": "CSV not found"}
