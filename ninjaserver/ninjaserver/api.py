@@ -45,7 +45,17 @@ def post_CSV(request, csv_files: UploadedFile = File(...)):
 @api.post("/signalName", tags=["CSV"])
 def post_signal_name(request, load: SignalName):
     signal_name = load.signal_name
-    # signals = request_information["signals"]
+    
+    # Update signal information
+    request_information.pop('signal', None)
+    request_information.pop('si_signal', None)
+    request_information.pop('signal_windows', None)
+    request_information.pop('si_signal_windows', None)
+    request_information.pop('fft_windows', None)
+    request_information.pop('si_fft_windows', None)
+    request_information.pop('trip_windows', None)
+    request_information.pop('si_trip_windows', None)
+
     request_information["signal_name"] = signal_name
 
     return {"response": signal_name}
