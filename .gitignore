@@ -3,5 +3,6 @@
 ninjaserver/env-django-ninja/
 /package_tutorial/
 __pycache__/
+db.sqlite3
 *.pyc
 *.csv
