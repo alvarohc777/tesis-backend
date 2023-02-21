@@ -1,15 +1,16 @@
 from ninja import NinjaAPI, File, Schema
 from ninja.files import UploadedFile
+from typing import List
+
 from fault_detector.models import EventSignal
 from fault_detector.schema import SignalNameSchema, EventSignalSchema, NotFoundSchema
-from typing import List
+# Custom Package
 from utils_tesis.signalload import CSV_pandas_path
 import utils_tesis.plot_api as plt_api
 
 import shutil
 import os
 import glob
-# from pydantic import BaseModel
 
 api =NinjaAPI()
 print(os.getcwd())
@@ -26,24 +27,43 @@ else:
 # Variables
 request_information = {}
 
-@api.post('/uploadCSV', tags=['CSV'])
-def post_CSV(request, csv_files: UploadedFile = File(...)):
-    csv_file_path = f"{temp_csv_path}/{csv_files.name}"
-    with open(csv_file_path, "wb+") as f:
-        f.write(csv_files.file.read())
+def newRequest(csv_file_path, csv_file_name):
     request_information.clear()
-    request_information["plots"] = {}
-    csv_file_name = csv_files.name
     signals = CSV_pandas_path(csv_file_path)
-
-    request_information["filename"] = csv_file_name
+    request_information["plots"] = {}
     request_information["signals"] = signals
     request_information["window_length"] = 64
     request_information["step"] = 4
+    request_information["filename"] = csv_file_name
+    return {"signals_list": signals.labels_list, "file_name": csv_file_name}
+
+@api.post('/uploadCSV', tags=['CSV'])
+def post_CSV(request, csv_files: UploadedFile = File(...)):
+    csv_file_path = f"{temp_csv_path}/{csv_files.name}"
+    
+    with open(csv_file_path, "wb+") as f:
+        f.write(csv_files.file.read())
+    csv_file_name = csv_files.name
+    
+    
 
     print(f"csv filename: {csv_file_name}")
+    
+    response = newRequest(csv_file_path, csv_file_name)
+    return response
 
-    return {"signals_list": signals.labels_list, "file_name": csv_file_name}
+@api.get('/csvSampleSelect/{id}', tags=['CSV'])
+def get_sample_csv(request, id: int):
+    try:
+        csv_file = EventSignal.objects.get(pk=id)
+        csv_file_path = str(csv_file.CSV)
+        print(csv_file_path)
+        csv_file_name = str(csv_file.title)
+        response = newRequest(csv_file_path, csv_file_name)
+        return response
+    except:
+        return {'Error': 'Blank space in Dropdown'}
+    
 
     
 @api.post("/signalName", tags=["CSV"])
@@ -128,8 +148,8 @@ async def plot_si_fft_anim(request):
 
 @api.get("/csvSamples", response=List[EventSignalSchema])
 def csvSamples(request):
-    
-    return EventSignal.objects.all()
+        return EventSignal.objects.all()
+         
 
 @api.get('/csvSamples/{csv_id}', response={200: EventSignalSchema, 404: NotFoundSchema})
 def csvSample(request, csv_id:int):
