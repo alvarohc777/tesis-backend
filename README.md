@@ -6,4 +6,4 @@ Backend for fault detection strategy based on harmonic distortion as part of res
 - [ ] Accept Window Size as input parameter.
 - [ ] Accept Window Step as input.
 - [ ] Accept Threshold as input.
-- [ ] Include example CSV (fault, HIF, caps, etc).
+- [x] Include example CSV (fault, HIF, caps, etc).
